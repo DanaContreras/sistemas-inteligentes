@@ -1,16 +1,13 @@
 import sys
 import math
 
-# Grow and multiply your organisms to end up larger than your opponent.
-
-# width: columns in the game grid
-# height: rows in the game grid
 width, height = [int(i) for i in input().split()]
 directions = [(0,-1), (0,1), (1,0), (-1, 0)]
 current_coord = (1,2) #inicial coordenate
-current_id = 'ROOT'
+current_id = 1 #inicial id ROOT
 
 def is_neighbor(coord, x, y):
+    '''Function that checks if the coordinate specified by x and y is adjacent to the tuple coord. '''
     dx = abs(x - coord[0])
     dy = abs(y - coord[1])
     
@@ -62,7 +59,7 @@ while True:
         if (x == current_coord[0] and y == current_coord[1] and owner == 1 and (_type == 'ROOT' or _type == 'BASIC')):
             current_id = organ_id
 
-        if (_type == 'WALL' and is_neighbor(current_coord, x, y)):
+        if ((_type == 'WALL' or (_type == 'BASIC' and owner == 1)) and is_neighbor(current_coord, x, y)):
             neighbor_list.remove((x,y))
 
         if (_type == 'A'):
@@ -76,8 +73,10 @@ while True:
     required_actions_count = int(input())  # your number of organisms, output an action for each one in any order
     for i in range(required_actions_count):
         print(neighbor_list, file=sys.stderr, flush=True)
-        # Write an action using print
-        # To debug: print("Debug messages...", file=sys.stderr, flush=True)
-        current_coord = hill_climbing(current_coord, neighbor_list, proteinA_list)
-        #print(_type, file=sys.stderr, flush=True)
-        print(f"GROW {current_id} {current_coord[0]} {current_coord[1]} BASIC")
+        new_coord = hill_climbing(current_coord, neighbor_list, proteinA_list)
+        
+        if (new_coord == current_coord):
+            print(f'WAIT')
+        else:
+            current_coord = new_coord
+            print(f"GROW {current_id} {current_coord[0]} {current_coord[1]} BASIC")
