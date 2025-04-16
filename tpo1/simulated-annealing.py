@@ -36,14 +36,14 @@ def simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number
     new_coord=()
     
     temperature=schelude(turn_number) #La temperatura se calcula en base al turno
-
+    print(f'temperature {temperature}', file=sys.stderr, flush=True)
     if temperature == 0:
         new_coord = current_coord #Si la temperatura es 0, devuelvo actual
-
+    
     next = random.choice(neighbor_list) #Elijo uno de los vecinos al azar
 
     delta_E = h(next, proteinA_list) - h(current_coord, proteinA_list)  #∆E ← VALOR(siguiente) - VALOR(actual)  Siendo VALOR el resultado de la heuristica
-    
+    print(f'delta_E {delta_E}', file=sys.stderr, flush=True)
     if delta_E < 0:
         new_coord = next
     else:
