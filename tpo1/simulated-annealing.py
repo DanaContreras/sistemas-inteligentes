@@ -19,23 +19,14 @@ def h(coord, proteinA_list):
     '''Heuristic function'''
     return min(abs(px - coord[0]) + abs(py - coord[1]) for (px, py) in proteinA_list)
 
-
-
-
-
-
-def schelude(turno): #cronograma
-    if turno==1:
-        temperature=100
-    else:
-        temperature=100-turno
-    return temperature
+def schedule(turn): #esquema de enfriamiento
+    return max(0, 100 - turn)
 
 def simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number):
     '''Funcion para el simulated annealing'''
-    new_coord=()
+    new_coord = ()
     
-    temperature=schelude(turn_number) #La temperatura se calcula en base al turno
+    temperature = schedule(turn_number) #La temperatura se calcula en base al turno
     print(f'temperature {temperature}', file=sys.stderr, flush=True)
     if temperature == 0:
         new_coord = current_coord #Si la temperatura es 0, devuelvo actual
@@ -44,6 +35,7 @@ def simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number
 
     delta_E = h(next, proteinA_list) - h(current_coord, proteinA_list)  #∆E ← VALOR(siguiente) - VALOR(actual)  Siendo VALOR el resultado de la heuristica
     print(f'delta_E {delta_E}', file=sys.stderr, flush=True)
+    
     if delta_E < 0:
         new_coord = next
     else:
@@ -53,16 +45,9 @@ def simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number
             new_coord = next
     return new_coord
 
-
-
-
-
-
-
-
 # game loop
 while True:
-    turn_number = turn_number+1 #Incremento mi contador de turno
+    turn_number = turn_number + 1 #Incremento mi contador de turno
 
     proteinA_list = []
     neighbor_list = [(current_coord[0] + dx, current_coord[1] + dy) for (dx, dy) in directions]
