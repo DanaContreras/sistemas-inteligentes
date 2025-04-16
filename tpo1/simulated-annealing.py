@@ -48,6 +48,7 @@ def simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number
         new_coord = next
     else:
         probability = math.exp(-delta_E / temperature )
+        print(f'probability {probability}', file=sys.stderr, flush=True)
         if (random.random() < probability):
             new_coord = next
     return new_coord
