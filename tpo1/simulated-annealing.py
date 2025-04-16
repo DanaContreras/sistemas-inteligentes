@@ -1,5 +1,6 @@
 import sys
 import math
+import random
 
 width, height = [int(i) for i in input().split()]
 directions = [(0,-1), (0,1), (1,0), (-1, 0)]
@@ -23,28 +24,33 @@ def h(coord, proteinA_list):
 
 
 
-def schelude(temperature, turno):
+def schelude(turno): #cronograma
     if turno==1:
         temperature=100
     else:
         temperature=100-turno
+    return temperature
 
 def simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number):
     '''Funcion para el simulated annealing'''
+    new_coord=()
     
     temperature=schelude(turn_number) #La temperatura se calcula en base al turno
 
     if temperature == 0:
-        return current_coord #Si la temperatura es 0, devuelvo actual
+        new_coord = current_coord #Si la temperatura es 0, devuelvo actual
 
     next = random.choice(neighbor_list) #Elijo uno de los vecinos al azar
 
     delta_E = h(next, proteinA_list) - h(current_coord, proteinA_list)  #∆E ← VALOR(siguiente) - VALOR(actual)  Siendo VALOR el resultado de la heuristica
     
     if delta_E < 0:
-        current_coord = next
+        new_coord = next
     else:
-        probability = e ^ (delta_E/temperature) #En duda sobre como hacer lo del valor de e
+        probability = math.exp(-delta_E / temperature )
+        if (random.random() < probability):
+            new_coord = next
+    return new_coord
 
 
 
@@ -75,7 +81,7 @@ while True:
         if (x == current_coord[0] and y == current_coord[1] and owner == 1 and (_type == 'ROOT' or _type == 'BASIC')):
             current_id = organ_id
 
-        if ((_type == 'WALL' or (_type == 'BASIC' and owner == 1)) and is_neighbor(current_coord, x, y)):
+        if ((_type == 'WALL' or ((_type == 'BASIC' or _type == 'ROOT')  and owner == 1)) and is_neighbor(current_coord, x, y)):
             neighbor_list.remove((x,y))
 
         if (_type == 'A'):
@@ -90,8 +96,8 @@ while True:
     for i in range(required_actions_count):
         print(neighbor_list, file=sys.stderr, flush=True)
 
-        new_coord = simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number):
-        
+        new_coord = simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number)
+        print(f'new_coord {new_coord}', file=sys.stderr, flush=True)
         if (new_coord == current_coord):
             print(f'WAIT')
         else:
