@@ -41,7 +41,7 @@ def simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number
 
     delta_E = h(next, proteinA_list) - h(current_coord, proteinA_list)  #∆E ← VALOR(siguiente) - VALOR(actual)  Siendo VALOR el resultado de la heuristica
     
-    if delta_E > 0:
+    if delta_E < 0:
         current_coord = next
     else:
         probability = e ^ (delta_E/temperature) #En duda sobre como hacer lo del valor de e
