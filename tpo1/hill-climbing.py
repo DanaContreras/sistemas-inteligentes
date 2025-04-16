@@ -59,7 +59,7 @@ while True:
         if (x == current_coord[0] and y == current_coord[1] and owner == 1 and (_type == 'ROOT' or _type == 'BASIC')):
             current_id = organ_id
 
-        if ((_type == 'WALL' or (_type == 'BASIC' and owner == 1)) and is_neighbor(current_coord, x, y)):
+        if ((_type == 'WALL' or ((_type == 'BASIC' or _type == 'ROOT') and owner == 1)) and is_neighbor(current_coord, x, y)):
             neighbor_list.remove((x,y))
 
         if (_type == 'A'):
