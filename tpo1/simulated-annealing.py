@@ -95,11 +95,13 @@ while True:
     required_actions_count = int(input())  # your number of organisms, output an action for each one in any order
     for i in range(required_actions_count):
         print(neighbor_list, file=sys.stderr, flush=True)
-
-        new_coord = simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number)
-        print(f'new_coord {new_coord}', file=sys.stderr, flush=True)
-        if (new_coord == current_coord):
-            print(f'WAIT')
+        if neighbor_list:
+            new_coord = simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number)
+            print(f'new_coord {new_coord}', file=sys.stderr, flush=True)
+            if (new_coord == current_coord):
+                print(f'WAIT')
+            else:
+                current_coord = new_coord
+                print(f"GROW {current_id} {current_coord[0]} {current_coord[1]} BASIC")
         else:
-            current_coord = new_coord
-            print(f"GROW {current_id} {current_coord[0]} {current_coord[1]} BASIC")
+            print(f'WAIT')
