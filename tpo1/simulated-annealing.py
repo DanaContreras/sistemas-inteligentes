@@ -20,11 +20,11 @@ def h(coord, proteinA_list):
     return min(abs(px - coord[0]) + abs(py - coord[1]) for (px, py) in proteinA_list)
 
 def schedule(turn): #esquema de enfriamiento
-    return max(0, 100 - turn)
+    return 0.8 ** turn
 
 def simulated_annealing(current_coord, neighbor_list, proteinA_list, turn_number):
     '''Funcion para el simulated annealing'''
-    new_coord = ()
+    new_coord = current_coord
     
     temperature = schedule(turn_number) #La temperatura se calcula en base al turno
     print(f'temperature {temperature}', file=sys.stderr, flush=True)
